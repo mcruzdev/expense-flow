@@ -1,16 +1,21 @@
 package guru.quarkus.expense.resource;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.quarkus.expense.data.HumanDecisionRequest;
 import guru.quarkus.expense.data.PreSignedURLRequest;
 import guru.quarkus.expense.data.PreSignedURLResponse;
 import guru.quarkus.expense.data.SubmitExpenseRequest;
 import guru.quarkus.expense.domain.Expense;
 import guru.quarkus.expense.domain.ExpenseDecision;
+import guru.quarkus.expense.domain.ReviewerDecisionEvent;
 import guru.quarkus.expense.infra.AmazonS3Service;
 import guru.quarkus.expense.orchestration.ProcessExpenseFlow;
+import io.cloudevents.core.builder.CloudEventBuilder;
+import io.cloudevents.jackson.JsonCloudEventData;
 import io.quarkus.logging.Log;
-import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.panache.common.Sort;
+import io.serverlessworkflow.impl.WorkflowApplication;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
@@ -18,8 +23,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
-import java.time.Instant;
-import java.util.List;
+import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -34,10 +39,14 @@ public class GlobalResource {
 
     final ProcessExpenseFlow processExpenseFlow;
     final AmazonS3Service amazonS3Service;
+    final WorkflowApplication app;
+    final ObjectMapper jackson;
 
-    public GlobalResource(ProcessExpenseFlow processExpenseFlow, AmazonS3Service amazonS3Service) {
+    public GlobalResource(ProcessExpenseFlow processExpenseFlow, AmazonS3Service amazonS3Service, WorkflowApplication app, ObjectMapper jackson) {
         this.processExpenseFlow = processExpenseFlow;
         this.amazonS3Service = amazonS3Service;
+        this.app = app;
+        this.jackson = jackson;
     }
 
     @POST
@@ -73,25 +82,34 @@ public class GlobalResource {
     }
 
     @PATCH
-    @Path("/expenses/{expenseId}")
-    public Response humanDecision(@PathParam("expenseId") Long expenseId, HumanDecisionRequest request) {
+    @Path("/expenses/{expenseID}")
+    public Response humanDecision(@PathParam("expenseID") Long expenseID, HumanDecisionRequest request) {
+
         if (request == null || request.decision() == null) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(Map.of("error", "decision is required: APPROVE or REJECT"))
                     .build();
         }
 
-        return QuarkusTransaction.requiringNew().call(() -> {
-            Expense expense = Expense.findById(expenseId);
-            if (expense == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity(Map.of("error", "Expense not found."))
-                        .build();
-            }
+        ReviewerDecisionEvent event = new ReviewerDecisionEvent(
+                expenseID, ExpenseDecision.byReviewer(request.decision(), request.explanation()));
 
-            expense.addReviewerDecision(new ExpenseDecision(request.decision(), request.explanation(), List.of(), List.of(), Instant.now()));
-            return Response.ok(expense).build();
-        });
+        // It can be done by Microprofile Reactive Messaging channels
+        JsonNode data = jackson.convertValue(event, JsonNode.class);
+        app.eventPublishers()
+                .stream()
+                .findAny()
+                .ifPresent(publisher -> publisher.publish(
+                        CloudEventBuilder.v1()
+                                .withId(UUID.randomUUID().toString())
+                                .withType(ReviewerDecisionEvent.CE_TYPE)
+                                .withTime(OffsetDateTime.now())
+                                .withData(JsonCloudEventData.wrap(data))
+                                .withSource(URI.create("https://guru.quarkus/expense-flow"))
+                                .build()
+                ));
+
+        return Response.accepted().build();
     }
 
     @GET

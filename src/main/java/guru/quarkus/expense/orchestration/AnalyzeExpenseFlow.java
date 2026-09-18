@@ -12,11 +12,13 @@ import io.quarkiverse.flow.Flow;
 import io.quarkiverse.flow.dsl.FlowWorkflowBuilder;
 import io.quarkus.logging.Log;
 import io.quarkus.narayana.jta.QuarkusTransaction;
+import io.serverlessworkflow.api.types.FlowDirectiveEnum;
 import io.serverlessworkflow.api.types.Workflow;
+import io.serverlessworkflow.impl.WorkflowError;
+import io.serverlessworkflow.impl.WorkflowException;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.net.URL;
-import java.util.Map;
 
 import static io.quarkiverse.flow.dsl.FlowDSL.consumed;
 import static io.quarkiverse.flow.dsl.FlowDSL.function;
@@ -25,6 +27,7 @@ import static io.quarkiverse.flow.dsl.FlowDSL.on;
 import static io.quarkiverse.flow.dsl.FlowDSL.one;
 import static io.quarkiverse.flow.dsl.FlowDSL.switchWhenOrElse;
 import static io.quarkiverse.flow.dsl.FlowDSL.toOne;
+import static io.serverlessworkflow.impl.WorkflowError.error;
 
 @ApplicationScoped
 public class AnalyzeExpenseFlow extends Flow {
@@ -61,16 +64,37 @@ public class AnalyzeExpenseFlow extends Flow {
                             return result;
                         }),
                         switchWhenOrElse("route", (AnalysisResult result) ->
-                                result.decision.decision() == Decision.REVIEW, "waitHuman", "proceed"),
-                        listen("waitHuman", toOne(consumed("guru.quarkus.expense.human.decision"))),
+                                result.decision.decision() == Decision.REVIEW, "callReviewer", "updateExpense"),
+                        function("callReviewer", AnalyzeExpenseFlow::updateExpenseWithAnalysisResult),
+                        listen("waitHuman", toOne(consumed(ReviewerDecisionEvent.CE_TYPE))),
                         function("handleHumanDecision", (ReviewerDecisionEvent event) -> {
-                            QuarkusTransaction.requiringNew().run(() -> Expense.update("status = :status where id = :id",
-                                    Map.of("status", Expense.Status.AI_REVIEWED, "id", event.expenseID())));
+                            QuarkusTransaction.requiringNew().run(() -> {
+                                Expense expense = Expense.<Expense>findByIdOptional(event.expenseID()).orElseThrow(
+                                        () -> new WorkflowException(expenseIDError(event.expenseID()))
+                                );
+                                // add review from human
+                                expense.addReviewerDecision(event.expenseDecision());
+                            });
                             return event;
-                        })
-
+                        }).then(FlowDirectiveEnum.END),
+                        function("updateExpense", AnalyzeExpenseFlow::updateExpenseWithAnalysisResult)
                 )
                 .build();
+    }
+
+    private static AnalysisResult updateExpenseWithAnalysisResult(AnalysisResult result) {
+        QuarkusTransaction.requiringNew()
+                .run(() -> {
+                    Expense expense = Expense.<Expense>findByIdOptional(result.expenseID()).orElseThrow(() -> new WorkflowException(expenseIDError(result.expenseID())));
+                    expense.addDecision(result.decision);
+                });
+        return result;
+    }
+
+    private static WorkflowError expenseIDError(Long expenseID) {
+        return error(
+                "Expense #" + expenseID + " not found — cannot record the reviewer's decision. "
+                        + "It may have been deleted after the review was submitted.", 404).build();
     }
 
     private record AnalysisResult(Long expenseID, ExpenseDecision decision) {

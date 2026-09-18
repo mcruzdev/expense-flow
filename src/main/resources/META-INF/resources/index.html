@@ -1020,6 +1020,7 @@
         loadExpenseDetail(detailMatch[1]);
       } else if (hash === '#/submit') {
         showView('submit');
+        hideNotification();
       } else {
         showView('list');
         loadExpenses();
@@ -1295,22 +1296,55 @@
 
     async function submitReview(decision) {
       if (!currentReviewId) return;
+      const id = currentReviewId;
       const explanation = document.getElementById('rv-explanation').value.trim();
       setReviewButtons(true);
+
+      const banner    = document.getElementById('rv-decided-banner');
+      const actionBar = document.getElementById('rv-action-bar');
+
       try {
-        const res = await fetch(`/api/expenses/${currentReviewId}`, {
+        const res = await fetch(`/api/expenses/${id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ decision, explanation: explanation || null })
         });
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
-        /* Reload the detail to reflect the updated status */
-        await loadReviewDetail(currentReviewId);
+
+        /* The decision is recorded asynchronously by the workflow — lock the
+           form and wait for it to actually land before reloading, otherwise
+           an immediate reload would still see REQUIRES_HUMAN_REVIEW and
+           re-enable the buttons, allowing a second submission. */
+        actionBar.style.display = 'none';
+        banner.textContent  = '⏳ Recording your decision…';
+        banner.className    = 'review-decided-banner pending visible';
+
+        await waitForReviewOutcome(id);
+        if (currentReviewId === id) {
+          await loadReviewDetail(id);
+        }
       } catch (err) {
         setReviewButtons(false);
         const error = document.getElementById('rv-error');
         error.style.display = 'flex';
         error.textContent   = `Failed to submit decision: ${err.message}`;
+      }
+    }
+
+    /* Polls until the expense leaves REQUIRES_HUMAN_REVIEW, or gives up after ~15s */
+    async function waitForReviewOutcome(id, attempts = 20, delayMs = 750) {
+      for (let i = 0; i < attempts; i++) {
+        await new Promise(r => setTimeout(r, delayMs));
+        try {
+          const res = await fetch('/api');
+          if (res.ok) {
+            const expenses = await res.json();
+            const exp = expenses.find(e => String(e.id) === String(id));
+            if (exp && exp.status !== 'REQUIRES_HUMAN_REVIEW') return;
+          }
+        } catch {
+          /* keep polling — a transient network hiccup shouldn't abort the wait */
+        }
       }
     }
 

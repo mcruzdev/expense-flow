@@ -10,7 +10,6 @@ import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.serverlessworkflow.api.types.Workflow;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import static io.quarkiverse.flow.dsl.FlowDSL.emit;
 import static io.quarkiverse.flow.dsl.FlowDSL.emitJson;
 import static io.quarkiverse.flow.dsl.FlowDSL.function;
 

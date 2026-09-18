@@ -10,4 +10,8 @@ public record ExpenseDecision(
         List<String> requiredHumanActions,
         Instant decidedAt
 ) {
+
+    public static ExpenseDecision byReviewer(Decision decision, String explanation) {
+        return new ExpenseDecision(decision, explanation, List.of(), List.of(), Instant.now());
+    }
 }
