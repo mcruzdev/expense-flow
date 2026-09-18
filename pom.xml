@@ -67,6 +67,17 @@
             <artifactId>quarkus-flow</artifactId>
         </dependency>
 
+        <!--        Langchain4J Agentic-->
+        <dependency>
+            <groupId>io.quarkiverse.langchain4j</groupId>
+            <artifactId>quarkus-langchain4j-agentic</artifactId>
+        </dependency>
+        <!--        OpenAI Provider-->
+        <dependency>
+            <groupId>io.quarkiverse.langchain4j</groupId>
+            <artifactId>quarkus-langchain4j-openai</artifactId>
+        </dependency>
+
         <!--        Amazon S3-->
         <dependency>
             <groupId>io.quarkiverse.amazonservices</groupId>
@@ -89,7 +100,7 @@
             <artifactId>quarkus-jdbc-mysql</artifactId>
         </dependency>
 
-<!--        OpenAPI UI-->
+        <!--        OpenAPI UI-->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-openapi</artifactId>

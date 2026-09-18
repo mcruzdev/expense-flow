@@ -393,6 +393,130 @@
       white-space: nowrap;
     }
 
+    /* ── status badge ────────────────────────────────────────────────── */
+    .status-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      padding: 0.125rem 0.5rem;
+      white-space: nowrap;
+    }
+
+    .status-badge.submitted {
+      background-color: #e0e0e0;
+      color: #161616;
+    }
+
+    .status-badge.ai_reviewed {
+      background-color: #edf5ff;
+      color: #0043ce;
+    }
+
+    .status-badge.requires_human_review {
+      background-color: #fdf4e0;
+      color: #8a3800;
+    }
+
+    .status-badge.approved {
+      background-color: #defbe6;
+      color: #0e6027;
+    }
+
+    .status-badge.rejected {
+      background-color: #fff1f1;
+      color: #a2191f;
+    }
+
+    /* ── decision badge ──────────────────────────────────────────────── */
+    .decision-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      padding: 0.125rem 0.5rem;
+      white-space: nowrap;
+    }
+
+    .decision-badge.approve {
+      background-color: #defbe6;
+      color: #0e6027;
+    }
+
+    .decision-badge.reject {
+      background-color: #fff1f1;
+      color: #a2191f;
+    }
+
+    .decision-badge.review {
+      background-color: #fdf4e0;
+      color: #8a3800;
+    }
+
+    /* ── decision card ───────────────────────────────────────────────── */
+    .decision-card {
+      background-color: #ffffff;
+      padding: 2rem;
+      margin-top: 1rem;
+    }
+
+    .decision-card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #525252;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .decision-explanation {
+      font-size: 0.875rem;
+      color: #161616;
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+
+    .decision-list-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #525252;
+      margin-bottom: 0.5rem;
+    }
+
+    .decision-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.25rem 0;
+    }
+
+    .decision-list li {
+      font-size: 0.875rem;
+      color: #161616;
+      padding: 0.375rem 0;
+      border-bottom: 1px solid #f4f4f4;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .decision-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: #8d8d8d;
+    }
+
+    .decision-list li:last-child {
+      border-bottom: none;
+    }
+
+    .decision-list-empty {
+      font-size: 0.875rem;
+      color: #8d8d8d;
+      font-style: italic;
+      margin-bottom: 1.25rem;
+    }
+
     /* ── expense detail ──────────────────────────────────────────────── */
     .detail-back {
       margin-bottom: 1.5rem;
@@ -440,6 +564,181 @@
       color: #525252;
       font-size: 0.875rem;
     }
+
+    /* ── reviewer action bar ─────────────────────────────────────────── */
+    .review-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .review-image-card {
+      background-color: #ffffff;
+      padding: 1.5rem;
+    }
+
+    .review-image-card img {
+      width: 100%;
+      display: block;
+      border: 1px solid #e0e0e0;
+    }
+
+    .review-image-placeholder {
+      background-color: #f4f4f4;
+      border: 1px dashed #8d8d8d;
+      height: 12rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: #8d8d8d;
+    }
+
+    /* skeleton shimmer */
+    .receipt-skeleton {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      min-height: 14rem;
+      background: linear-gradient(90deg, #e0e0e0 25%, #f4f4f4 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* fade-in once loaded */
+    .receipt-img {
+      width: 100%;
+      display: block;
+      border: 1px solid #e0e0e0;
+      opacity: 0;
+      transition: opacity 300ms ease;
+    }
+
+    .receipt-img.loaded {
+      opacity: 1;
+    }
+
+    .receipt-error-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .receipt-retry-btn {
+      background: none;
+      border: 1px solid #8d8d8d;
+      color: #525252;
+      font-size: 0.75rem;
+      font-family: inherit;
+      padding: 0.25rem 0.75rem;
+      cursor: pointer;
+      margin-top: 0.25rem;
+    }
+
+    .receipt-retry-btn:hover {
+      background-color: #e8e8e8;
+    }
+
+    .review-image-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.32px;
+      color: #525252;
+      margin-bottom: 0.75rem;
+    }
+
+    .review-action-bar-wrap {
+      margin-top: 1.5rem;
+    }
+
+    .review-action-bar {
+      display: flex;
+      gap: 0;
+      margin-top: 0.75rem;
+    }
+
+    .cds-btn-danger {
+      background-color: #da1e28;
+      color: #ffffff;
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 400;
+      font-family: inherit;
+      padding: 0 1.5rem;
+      height: 3rem;
+      cursor: pointer;
+      transition: background-color 70ms;
+      flex: 1;
+      text-align: center;
+    }
+
+    .cds-btn-danger:hover:not(:disabled) {
+      background-color: #ba1b23;
+    }
+
+    .cds-btn-danger:disabled,
+    .cds-btn-success:disabled {
+      background-color: #c6c6c6;
+      color: #8d8d8d;
+      cursor: not-allowed;
+    }
+
+    .cds-btn-success {
+      background-color: #24a148;
+      color: #ffffff;
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 400;
+      font-family: inherit;
+      padding: 0 1.5rem;
+      height: 3rem;
+      cursor: pointer;
+      transition: background-color 70ms;
+      flex: 1;
+      text-align: center;
+    }
+
+    .cds-btn-success:hover:not(:disabled) {
+      background-color: #198038;
+    }
+
+    .review-decided-banner {
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .review-decided-banner.approved {
+      background-color: #defbe6;
+      border-left: 4px solid #24a148;
+      color: #0e6027;
+    }
+
+    .review-decided-banner.rejected {
+      background-color: #fff1f1;
+      border-left: 4px solid #da1e28;
+      color: #a2191f;
+    }
+
+    .review-decided-banner.pending {
+      background-color: #edf5ff;
+      border-left: 4px solid #0f62fe;
+      color: #0043ce;
+    }
+
+    .review-decided-banner.visible {
+      display: flex;
+    }
   </style>
 </head>
 <body>
@@ -449,6 +748,7 @@
     <nav>
       <span class="nav-link" id="nav-list" onclick="navigate('list')">All Expenses</span>
       <span class="nav-link" id="nav-submit" onclick="navigate('submit')">Submit</span>
+      <span class="nav-link" id="nav-reviewer" onclick="navigate('reviewer')" style="border-left:1px solid #393939;margin-left:auto">Reviewer</span>
     </nav>
   </header>
 
@@ -478,6 +778,7 @@
             <th>Date</th>
             <th>Description</th>
             <th>Amount</th>
+            <th>Status</th>
             <th></th>
           </tr>
         </thead>
@@ -560,8 +861,115 @@
           <span class="detail-value" id="d-description"></span>
         </div>
         <div class="detail-row">
+          <span class="detail-label">Status</span>
+          <span class="detail-value" id="d-status"></span>
+        </div>
+        <div class="detail-row">
           <span class="detail-label">Submitted</span>
           <span class="detail-value" id="d-date"></span>
+        </div>
+      </div>
+      <div id="decision-card" class="decision-card" style="display:none">
+        <div class="decision-card-title">Decision History</div>
+        <div id="d-decisions"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VIEW: reviewer queue ─────────────────────────────────────── -->
+  <div id="view-reviewer" class="view">
+    <div class="page-content wide">
+      <div class="expenses-toolbar">
+        <div>
+          <h1 class="page-title" style="margin-bottom:0.25rem">Review Queue</h1>
+          <p class="page-subtitle" style="margin-bottom:0">Expenses pending manual review.</p>
+        </div>
+        <button class="cds-btn-primary" style="width:auto;padding:0 1.5rem" onclick="loadReviewQueue()">↺ Refresh</button>
+      </div>
+      <div id="rq-loading" class="list-loading">
+        <span class="loading-spinner dark"></span> Loading…
+      </div>
+      <div id="rq-error" class="cds-inline-notification error" style="display:none"></div>
+      <div id="rq-empty" class="expenses-empty" style="display:none">
+        <strong>Queue is empty</strong>
+        No expenses are currently waiting for manual review.
+      </div>
+      <table id="rq-table" class="cds-data-table" style="display:none">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rq-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── VIEW: reviewer detail ────────────────────────────────────── -->
+  <div id="view-review-detail" class="view">
+    <div class="page-content wide">
+      <div class="detail-back">
+        <button class="cds-btn-ghost" onclick="navigate('reviewer')">← Back to review queue</button>
+      </div>
+      <h1 class="page-title" id="rv-title">Review Expense</h1>
+      <div id="rv-loading" class="list-loading">
+        <span class="loading-spinner dark"></span> Loading…
+      </div>
+      <div id="rv-error" class="cds-inline-notification error" style="display:none"></div>
+      <div id="rv-content" style="display:none">
+        <div class="review-layout">
+          <!-- left: receipt image -->
+          <div class="review-image-card">
+            <div class="review-image-label">Receipt</div>
+            <div id="rv-image-wrap">
+              <div class="receipt-skeleton"></div>
+            </div>
+            <div id="rv-decided-banner" class="review-decided-banner"></div>
+            <div id="rv-action-bar" class="review-action-bar-wrap">
+              <div class="cds-form-group" style="margin-bottom:0.75rem">
+                <label class="cds-label" for="rv-explanation">Explanation (optional)</label>
+                <textarea class="cds-textarea" id="rv-explanation" placeholder="Add context for this decision…"></textarea>
+              </div>
+              <div class="review-action-bar">
+                <button class="cds-btn-danger" id="rv-reject-btn" onclick="submitReview('REJECT')">✕ Reject</button>
+                <button class="cds-btn-success" id="rv-approve-btn" onclick="submitReview('APPROVE')">✓ Approve</button>
+              </div>
+            </div>
+          </div>
+          <!-- right: expense fields -->
+          <div>
+            <div class="detail-card">
+              <div class="detail-row">
+                <span class="detail-label">ID</span>
+                <span class="detail-value" id="rv-id"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Amount</span>
+                <span class="detail-value" id="rv-amount"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Description</span>
+                <span class="detail-value" id="rv-description"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Status</span>
+                <span class="detail-value" id="rv-status"></span>
+              </div>
+              <div class="detail-row" style="border-bottom:none">
+                <span class="detail-label">Submitted</span>
+                <span class="detail-value" id="rv-date"></span>
+              </div>
+            </div>
+            <div id="rv-decision-card" class="decision-card" style="display:none;margin-top:1rem">
+              <div class="decision-card-title">Decision History</div>
+              <div id="rv-decisions"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -571,7 +979,7 @@
     /* ═══════════════════════════════════════════════════════════════════
        ROUTER
     ═══════════════════════════════════════════════════════════════════ */
-    const VIEWS = ['list', 'submit', 'detail'];
+    const VIEWS = ['list', 'submit', 'detail', 'reviewer', 'review-detail'];
 
     function navigate(view, expenseId) {
       VIEWS.forEach(v => {
@@ -590,13 +998,24 @@
         window.location.hash = '#/submit';
       } else if (view === 'detail' && expenseId != null) {
         window.location.hash = `#/expenses/${expenseId}`;
+      } else if (view === 'reviewer') {
+        window.location.hash = '#/reviewer';
+      } else if (view === 'review-detail' && expenseId != null) {
+        window.location.hash = `#/reviewer/${expenseId}`;
       }
     }
 
     function handleHash() {
       const hash = window.location.hash || '#/';
+      const reviewDetailMatch = hash.match(/^#\/reviewer\/(.+)$/);
       const detailMatch = hash.match(/^#\/expenses\/(.+)$/);
-      if (detailMatch) {
+      if (reviewDetailMatch) {
+        showView('review-detail');
+        loadReviewDetail(reviewDetailMatch[1]);
+      } else if (hash === '#/reviewer') {
+        showView('reviewer');
+        loadReviewQueue();
+      } else if (detailMatch) {
         showView('detail');
         loadExpenseDetail(detailMatch[1]);
       } else if (hash === '#/submit') {
@@ -656,6 +1075,7 @@
             <td class="date-cell">${formatDate(exp.createdAt)}</td>
             <td class="description-cell" title="${escHtml(exp.description)}">${escHtml(exp.description)}</td>
             <td class="amount-cell">${formatAmount(exp.amount)}</td>
+            <td>${statusBadge(exp.status)}</td>
             <td><button class="cds-btn-ghost" onclick="navigate('detail', ${exp.id})">View →</button></td>
           `;
           tbody.appendChild(tr);
@@ -697,7 +1117,16 @@
         document.getElementById('d-id').textContent          = exp.id;
         document.getElementById('d-amount').textContent      = formatAmount(exp.amount);
         document.getElementById('d-description').textContent = exp.description;
+        document.getElementById('d-status').innerHTML        = statusBadge(exp.status);
         document.getElementById('d-date').textContent        = formatDateFull(exp.createdAt);
+
+        const decisionCard = document.getElementById('decision-card');
+        if (exp.decisions && exp.decisions.length > 0) {
+          document.getElementById('d-decisions').innerHTML = renderDecisions(exp.decisions);
+          decisionCard.style.display = 'block';
+        } else {
+          decisionCard.style.display = 'none';
+        }
 
         loading.style.display = 'none';
         card.style.display    = 'block';
@@ -709,8 +1138,232 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════
+       REVIEWER QUEUE
+    ═══════════════════════════════════════════════════════════════════ */
+    async function loadReviewQueue() {
+      const loading = document.getElementById('rq-loading');
+      const error   = document.getElementById('rq-error');
+      const empty   = document.getElementById('rq-empty');
+      const table   = document.getElementById('rq-table');
+      const tbody   = document.getElementById('rq-tbody');
+
+      loading.style.display = 'block';
+      error.style.display   = 'none';
+      empty.style.display   = 'none';
+      table.style.display   = 'none';
+      tbody.innerHTML       = '';
+
+      try {
+        const res = await fetch('/api');
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const all = await res.json();
+
+        loading.style.display = 'none';
+
+        if (!all.length) {
+          empty.style.display = 'block';
+          return;
+        }
+
+        all.forEach(exp => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${exp.id}</td>
+            <td class="date-cell">${formatDate(exp.createdAt)}</td>
+            <td class="description-cell" title="${escHtml(exp.description)}">${escHtml(exp.description)}</td>
+            <td class="amount-cell">${formatAmount(exp.amount)}</td>
+            <td>${statusBadge(exp.status)}</td>
+            <td><button class="cds-btn-ghost" onclick="navigate('review-detail', ${exp.id})">Review →</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        table.style.display = 'table';
+      } catch (err) {
+        loading.style.display = 'none';
+        error.style.display   = 'flex';
+        error.textContent     = `Failed to load queue: ${err.message}`;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       REVIEWER DETAIL
+    ═══════════════════════════════════════════════════════════════════ */
+    let currentReviewId = null;
+
+    async function loadReviewDetail(id) {
+      currentReviewId = id;
+      const loading = document.getElementById('rv-loading');
+      const error   = document.getElementById('rv-error');
+      const content = document.getElementById('rv-content');
+      const title   = document.getElementById('rv-title');
+      document.getElementById('rv-explanation').value = '';
+
+      loading.style.display = 'block';
+      error.style.display   = 'none';
+      content.style.display = 'none';
+
+      try {
+        const res = await fetch('/api');
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const expenses = await res.json();
+        const exp = expenses.find(e => String(e.id) === String(id));
+        if (!exp) throw new Error(`Expense #${id} not found.`);
+
+        title.textContent = `Review Expense #${exp.id}`;
+        document.getElementById('rv-id').textContent          = exp.id;
+        document.getElementById('rv-amount').textContent      = formatAmount(exp.amount);
+        document.getElementById('rv-description').textContent = exp.description;
+        document.getElementById('rv-status').innerHTML        = statusBadge(exp.status);
+        document.getElementById('rv-date').textContent        = formatDateFull(exp.createdAt);
+
+        /* Decision history */
+        const aiCard = document.getElementById('rv-decision-card');
+        if (exp.decisions && exp.decisions.length > 0) {
+          document.getElementById('rv-decisions').innerHTML = renderDecisions(exp.decisions);
+          aiCard.style.display = 'block';
+        } else {
+          aiCard.style.display = 'none';
+        }
+
+        /* Buttons only make sense while a human decision is actually pending */
+        const banner    = document.getElementById('rv-decided-banner');
+        const actionBar = document.getElementById('rv-action-bar');
+        if (exp.status === 'REQUIRES_HUMAN_REVIEW') {
+          banner.className    = 'review-decided-banner';
+          actionBar.style.display = 'block';
+          setReviewButtons(false);
+        } else if (exp.status === 'SUBMITTED' || exp.status === 'AI_REVIEWED') {
+          banner.textContent  = '⏳ Still being analyzed — nothing to review yet.';
+          banner.className    = 'review-decided-banner pending visible';
+          actionBar.style.display = 'none';
+        } else {
+          const outcome = exp.status === 'APPROVED' ? 'approved' : 'rejected';
+          banner.textContent  = `✓ This expense has been ${outcome}.`;
+          banner.className    = `review-decided-banner ${outcome} visible`;
+          actionBar.style.display = 'none';
+        }
+
+        /* Receipt image */
+        await loadReceiptImage(exp.id);
+
+        loading.style.display = 'none';
+        content.style.display = 'block';
+      } catch (err) {
+        loading.style.display = 'none';
+        error.style.display   = 'flex';
+        error.textContent     = err.message;
+      }
+    }
+
+    async function loadReceiptImage(expenseId) {
+      const wrap = document.getElementById('rv-image-wrap');
+      wrap.innerHTML = '<div class="receipt-skeleton"></div>';
+      try {
+        const res = await fetch(`/api/expenses/${expenseId}/image`);
+        if (!res.ok) throw new Error('receipt not available');
+        const { url } = await res.json();
+
+        /* Preload the image before swapping — avoids a second skeleton flash */
+        const img = new Image();
+        img.className = 'receipt-img';
+        img.alt = `Receipt for expense #${expenseId}`;
+        img.onload = () => {
+          wrap.innerHTML = '';
+          wrap.appendChild(img);
+          /* Trigger reflow so the transition fires */
+          requestAnimationFrame(() => img.classList.add('loaded'));
+        };
+        img.onerror = () => {
+          wrap.innerHTML = `
+            <div class="review-image-placeholder">
+              <span class="receipt-error-icon">🖼️</span>
+              <span>Could not load image</span>
+              <button class="receipt-retry-btn" onclick="loadReceiptImage(${expenseId})">↺ Retry</button>
+            </div>`;
+        };
+        img.src = url;
+      } catch {
+        wrap.innerHTML = `
+          <div class="review-image-placeholder">
+            <span class="receipt-error-icon">⚠️</span>
+            <span>Receipt unavailable</span>
+            <button class="receipt-retry-btn" onclick="loadReceiptImage(${expenseId})">↺ Retry</button>
+          </div>`;
+      }
+    }
+
+    async function submitReview(decision) {
+      if (!currentReviewId) return;
+      const explanation = document.getElementById('rv-explanation').value.trim();
+      setReviewButtons(true);
+      try {
+        const res = await fetch(`/api/expenses/${currentReviewId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ decision, explanation: explanation || null })
+        });
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        /* Reload the detail to reflect the updated status */
+        await loadReviewDetail(currentReviewId);
+      } catch (err) {
+        setReviewButtons(false);
+        const error = document.getElementById('rv-error');
+        error.style.display = 'flex';
+        error.textContent   = `Failed to submit decision: ${err.message}`;
+      }
+    }
+
+    function setReviewButtons(disabled) {
+      document.getElementById('rv-approve-btn').disabled = disabled;
+      document.getElementById('rv-reject-btn').disabled  = disabled;
+      document.getElementById('rv-explanation').disabled = disabled;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
        HELPERS
     ═══════════════════════════════════════════════════════════════════ */
+    function statusBadge(status) {
+      const s = (status || 'SUBMITTED').toLowerCase();
+      const label = s.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      return `<span class="status-badge ${s}">${label}</span>`;
+    }
+
+    function decisionBadge(decision) {
+      const s = (decision || '').toLowerCase();
+      const label = s.charAt(0).toUpperCase() + s.slice(1);
+      return `<span class="decision-badge ${s}">${label}</span>`;
+    }
+
+    function renderList(items) {
+      if (!items || items.length === 0) {
+        return `<span class="decision-list-empty">None</span>`;
+      }
+      return `<ul class="decision-list">${items.map(i => `<li>${escHtml(i)}</li>`).join('')}</ul>`;
+    }
+
+    function renderDecisions(decisions) {
+      if (!decisions || decisions.length === 0) return '';
+      return decisions.map((d, i) => `
+        <div class="detail-row" style="padding-top:${i === 0 ? 0 : '1rem'}">
+          <span class="detail-label">Decision</span>
+          <span class="detail-value">${decisionBadge(d.decision)}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Explanation</span>
+          <span class="detail-value">${escHtml(d.explanation || '—')}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Reasons</span>
+          <span class="detail-value">${renderList(d.reasons)}</span>
+        </div>
+        <div class="detail-row" style="border-bottom:${i === decisions.length - 1 ? 'none' : ''}">
+          <span class="detail-label">Required actions</span>
+          <span class="detail-value">${renderList(d.requiredHumanActions)}</span>
+        </div>
+      `).join('');
+    }
+
     function formatAmount(value) {
       return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
     }
