@@ -1,6 +1,5 @@
 package guru.quarkus.expense.domain;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,14 +21,6 @@ public class Budget extends PanacheEntityBase {
     public BigDecimal totalBudget;
     @Column(nullable = false)
     public BigDecimal spent;
-
-    protected Budget() {
-    }
-
-    public Budget(BigDecimal totalBudget, BigDecimal spent) {
-        this.totalBudget = totalBudget;
-        this.spent = spent;
-    }
 
     public static Budget current() {
         return findAll().firstResult();
